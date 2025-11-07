@@ -2,33 +2,38 @@
 #include <string>
 using namespace std;
 
+// === ESTRUCTURA CLIENTE ===
 struct Cliente {
-    int id;
-    string nombre;
-    string contacto;
-    Cliente* siguiente; 
+    int id;           // ID numérico único (DNI)
+    string nombre;    // Nombre del cliente
+    string contacto;  // Teléfono 
+    Cliente* siguiente; // Puntero al siguiente nodo en la lista enlazada
 };
+Cliente* cabezaClientes = NULL; // Apunta al primer cliente (lista vacía al inicio)
 
-Cliente* cabezaClientes = NULL;
-
+// === REGISTRAR CLIENTE ===
+// Agrega un nuevo cliente al final de la lista enlazada
 void registrarCliente(int id, string nombre, string contacto) {
-    Cliente* nuevo = new Cliente;
+    Cliente* nuevo = new Cliente; // Crea un nuevo nodo en memoria dinámica
     nuevo->id = id;
-		nuevo->nombre = nombre;
-		nuevo->contacto = contacto;
-		nuevo->siguiente = NULL;
+    nuevo->nombre = nombre;
+    nuevo->contacto = contacto;
+    nuevo->siguiente = NULL;
 
     if (cabezaClientes == NULL) {
-        cabezaClientes = nuevo;
+        cabezaClientes = nuevo; // Si la lista está vacía, el nuevo es el primero
     } else {
         Cliente* temp = cabezaClientes;
         while (temp->siguiente != NULL) {
-            temp = temp->siguiente;
+            temp = temp->siguiente; // Recorre hasta el último nodo
         }
-        temp->siguiente = nuevo;
+        temp->siguiente = nuevo; // Enlaza el nuevo nodo al final
     }
     cout << "Cliente registrado: " << nombre << endl;
 }
+
+// === MOSTRAR CLIENTES ===
+// Recorre e imprime todos los clientes registrados
 void mostrarClientes() {
     Cliente* temp = cabezaClientes;
     if (temp == NULL) {
@@ -37,28 +42,31 @@ void mostrarClientes() {
     }
     cout << "\n--- Lista de Clientes ---\n";
     while (temp != NULL) {
-        cout << "ID: " << temp->id << " | Nombre: " << temp->nombre << " | Contacto: " << temp->contacto << endl;
+        cout << "ID: " << temp->id 
+             << " | Nombre: " << temp->nombre 
+             << " | Contacto: " << temp->contacto << endl;
         temp = temp->siguiente;
     }
 }
 
+// === ESTRUCTURA SERVICIO ===
+// Cola con prioridad: 1 = alta, 2 = media, 3 = baja
 struct Servicio {
     int id;
-    string tipo;
-    int prioridad; 
+    string tipo;      
+    int prioridad;    // Menor número = mayor prioridad
     Servicio* siguiente;
 };
+Servicio* frenteServicios = NULL; // Frente de la cola (primer servicio)
 
-Servicio* frenteServicios = NULL;
-
-   
+// === ENCOLAR SERVICIO ===
+// Inserta un servicio ordenado por prioridad (menor número primero)
 void encolarServicio(int id, string tipo, int prioridad) {
     Servicio* nuevo = new Servicio{id, tipo, prioridad, NULL};
 
-       
     if (frenteServicios == NULL || prioridad < frenteServicios->prioridad) {
         nuevo->siguiente = frenteServicios;
-        frenteServicios = nuevo;
+        frenteServicios = nuevo; // Inserta al inicio si tiene mayor prioridad
     } else {
         Servicio* temp = frenteServicios;
         while (temp->siguiente != NULL && temp->siguiente->prioridad <= prioridad) {
@@ -70,6 +78,8 @@ void encolarServicio(int id, string tipo, int prioridad) {
     cout << "Servicio agregado: " << tipo << " (Prioridad " << prioridad << ")\n";
 }
 
+// === EJECUTAR SERVICIO ===
+// Elimina y ejecuta el servicio de mayor prioridad (frente de la cola)
 void ejecutarServicio() {
     if (frenteServicios == NULL) {
         cout << "No hay servicios pendientes.\n";
@@ -78,9 +88,11 @@ void ejecutarServicio() {
     Servicio* temp = frenteServicios;
     frenteServicios = frenteServicios->siguiente;
     cout << "Ejecutando servicio ID " << temp->id << ": " << temp->tipo << endl;
-    delete temp;
+    delete temp; // Libera memoria
 }
 
+// === MOSTRAR SERVICIOS ===
+// Muestra todos los servicios en orden de prioridad
 void mostrarServicios() {
     if (frenteServicios == NULL) {
         cout << "No hay servicios en cola.\n";
@@ -89,24 +101,32 @@ void mostrarServicios() {
     Servicio* temp = frenteServicios;
     cout << "\n--- Cola de Servicios (Postventa) ---\n";
     while (temp != NULL) {
-        cout << "ID: " << temp->id << " | Tipo: " << temp->tipo << " | Prioridad: " << temp->prioridad << endl;
+        cout << "ID: " << temp->id 
+             << " | Tipo: " << temp->tipo 
+             << " | Prioridad: " << temp->prioridad << endl;
         temp = temp->siguiente;
     }
 }
 
+// === ESTRUCTURA REPUESTO ===
+// Pila (LIFO): último en entrar, primero en salir
 struct Repuesto {
     int id;
     string nombre;
-    Repuesto* abajo; // apunta al elemento anterior
+    Repuesto* abajo; // Apunta al repuesto anterior (debajo en la pila)
 };
-Repuesto* cimaRepuestos = NULL;
+Repuesto* cimaRepuestos = NULL; // Cima de la pila
 
+// === AGREGAR REPUESTO ===
+// Empuja un nuevo repuesto a la cima de la pila
 void agregarRepuesto(int id, string nombre) {
     Repuesto* nuevo = new Repuesto{id, nombre, cimaRepuestos};
     cimaRepuestos = nuevo;
     cout << "Repuesto agregado: " << nombre << endl;
 }
 
+// === USAR REPUESTO ===
+// Saca y usa el repuesto de la cima
 void usarRepuesto() {
     if (cimaRepuestos == NULL) {
         cout << "No hay repuestos disponibles.\n";
@@ -118,6 +138,8 @@ void usarRepuesto() {
     delete temp;
 }
 
+// === MOSTRAR REPUESTOS ===
+// Muestra la pila desde la cima hacia abajo
 void mostrarRepuestos() {
     if (cimaRepuestos == NULL) {
         cout << "Inventario vacío.\n";
@@ -130,10 +152,15 @@ void mostrarRepuestos() {
         temp = temp->abajo;
     }
 }
+
+// === PROGRAMA PRINCIPAL ===
 int main() {
     int opcion;
+
     do {
-        system("cls"); // Windows; usa "clear" en Linux/Mac
+        system("cls"); // Limpia pantalla
+
+        // === MENÚ EN CAJA ===
         cout << "==================================================\n";
         cout << "||     SISTEMA DE GESTION AUTOMOTRIZ            ||\n";
         cout << "==================================================\n";
@@ -147,29 +174,32 @@ int main() {
         cout << "|| 8. Usar repuesto                             ||\n";
         cout << "|| 9. Salir                                     ||\n";
         cout << "==================================================\n";
+
         cout << "\nSeleccione una opcion: ";
         cin >> opcion;
         cout << endl;
 
         switch (opcion) {
+
+            // === REGISTRAR CLIENTE CON VALIDACIÓN ===
             case 1: {
                 int id;
                 string nombre, contacto;
 
-                // ID: solo números (usa cin directo)
+                // ID: solo números
                 cout << "ID Cliente (solo numeros): ";
                 while (!(cin >> id)) {
                     cout << "Error: Ingrese solo numeros: ";
-                    cin.clear();
-                    cin.ignore(10000, '\n');
+                    cin.clear();           // Limpia estado de error
+                    cin.ignore(10000, '\n'); // Descarta entrada inválida
                 }
-                cin.ignore();  // limpia el salto de línea
+                cin.ignore(); // Elimina salto de línea después del número
 
-                // Nombre: texto normal
+                // Nombre: 
                 cout << "Nombre: ";
                 getline(cin, nombre);
 
-                // Contacto: solo números como texto
+                // Contacto: solo números
                 cout << "Contacto (solo numeros): ";
                 while (true) {
                     getline(cin, contacto);
@@ -191,25 +221,20 @@ int main() {
                 registrarCliente(id, nombre, contacto);
                 break;
             }
-            case 2:
-                mostrarClientes();
-                break;
+
+            case 2: mostrarClientes(); break;
             case 3: {
                 int id, prioridad;
                 string tipo;
                 cout << "ID Servicio: "; cin >> id;
                 cin.ignore();
                 cout << "Tipo de servicio: "; getline(cin, tipo);
-                cout << "Prioridad (1=Alta, 2=Media, 3=B_ps): "; cin >> prioridad;
+                cout << "Prioridad (1=Alta, 2=Media, 3=Baja): "; cin >> prioridad;
                 encolarServicio(id, tipo, prioridad);
                 break;
             }
-            case 4:
-                mostrarServicios();
-                break;
-            case 5:
-                ejecutarServicio();
-                break;
+            case 4: mostrarServicios(); break;
+            case 5: ejecutarServicio(); break;
             case 6: {
                 int id;
                 string nombre;
@@ -219,25 +244,18 @@ int main() {
                 agregarRepuesto(id, nombre);
                 break;
             }
-            case 7:
-                mostrarRepuestos();
-                break;
-            case 8:
-                usarRepuesto();
-                break;
-            case 9:
-                cout << "Saliendo..." << endl;
-                break;
-            default:
-                cout << "Opcion no valida. Intente nuevamente.\n";
-                break;
+            case 7: mostrarRepuestos(); break;
+            case 8: usarRepuesto(); break;
+            case 9: cout << "Saliendo..." << endl; break;
+            default: cout << "Opcion no valida. Intente nuevamente.\n"; break;
         }
-        
+
         if (opcion != 9) {
             cout << "\nPresione Enter para continuar...";
             cin.get();
         }
-        
-    } while (opcion != 9);
+
+    } while (opcion != 9); // Repite hasta elegir salir
+
     return 0;
 }
