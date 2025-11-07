@@ -93,3 +93,40 @@ void mostrarServicios() {
         temp = temp->siguiente;
     }
 }
+
+struct Repuesto {
+    int id;
+    string nombre;
+    Repuesto* abajo; // apunta al elemento anterior
+};
+Repuesto* cimaRepuestos = NULL;
+
+void agregarRepuesto(int id, string nombre) {
+    Repuesto* nuevo = new Repuesto{id, nombre, cimaRepuestos};
+    cimaRepuestos = nuevo;
+    cout << "Repuesto agregado: " << nombre << endl;
+}
+
+void usarRepuesto() {
+    if (cimaRepuestos == NULL) {
+        cout << "No hay repuestos disponibles.\n";
+        return;
+    }
+    Repuesto* temp = cimaRepuestos;
+    cimaRepuestos = cimaRepuestos->abajo;
+    cout << "Usando repuesto: " << temp->nombre << endl;
+    delete temp;
+}
+
+void mostrarRepuestos() {
+    if (cimaRepuestos == NULL) {
+        cout << "Inventario vacío.\n";
+        return;
+    }
+    Repuesto* temp = cimaRepuestos;
+    cout << "\n--- Pila de Repuestos ---\n";
+    while (temp != NULL) {
+        cout << "ID: " << temp->id << " | Nombre: " << temp->nombre << endl;
+        temp = temp->abajo;
+    }
+}
