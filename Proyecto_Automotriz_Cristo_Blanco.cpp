@@ -29,3 +29,15 @@ void registrarCliente(int id, string nombre, string contacto) {
     }
     cout << "Cliente registrado: " << nombre << endl;
 }
+void mostrarClientes() {
+    Cliente* temp = cabezaClientes;
+    if (temp == NULL) {
+        cout << "No hay clientes registrados.\n";
+        return;
+    }
+    cout << "\n--- Lista de Clientes ---\n";
+    while (temp != NULL) {
+        cout << "ID: " << temp->id << " | Nombre: " << temp->nombre << " | Contacto: " << temp->contacto << endl;
+        temp = temp->siguiente;
+    }
+}
