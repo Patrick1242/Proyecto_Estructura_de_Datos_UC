@@ -155,10 +155,39 @@ int main() {
             case 1: {
                 int id;
                 string nombre, contacto;
-                cout << "ID Cliente: "; cin >> id;
-                cin.ignore();
-                cout << "Nombre: "; getline(cin, nombre);
-                cout << "Contacto: "; getline(cin, contacto);
+
+                // ID: solo números (usa cin directo)
+                cout << "ID Cliente (solo numeros): ";
+                while (!(cin >> id)) {
+                    cout << "Error: Ingrese solo numeros: ";
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                }
+                cin.ignore();  // limpia el salto de línea
+
+                // Nombre: texto normal
+                cout << "Nombre: ";
+                getline(cin, nombre);
+
+                // Contacto: solo números como texto
+                cout << "Contacto (solo numeros): ";
+                while (true) {
+                    getline(cin, contacto);
+                    if (contacto.empty()) {
+                        cout << "Error: No puede estar vacio: ";
+                        continue;
+                    }
+                    bool valido = true;
+                    for (char c : contacto) {
+                        if (c < '0' || c > '9') {
+                            valido = false;
+                            break;
+                        }
+                    }
+                    if (valido) break;
+                    cout << "Error: Solo numeros permitidos: ";
+                }
+
                 registrarCliente(id, nombre, contacto);
                 break;
             }
