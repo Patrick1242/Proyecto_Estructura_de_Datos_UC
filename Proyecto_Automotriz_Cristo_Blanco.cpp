@@ -328,7 +328,6 @@ int main() {
 			        } else {
 			            cout << "Error: Ingrese solo numeros mayores a 0: ";
 			            cin.clear();
-			            cin.ignore(256, '\n');
 			        }
 			    }
 			
