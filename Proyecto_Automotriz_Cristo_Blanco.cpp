@@ -130,3 +130,86 @@ void mostrarRepuestos() {
         temp = temp->abajo;
     }
 }
+int main() {
+    int opcion;
+    do {
+        cout << "\n========= SISTEMA DE GESTIÓN AUTOMOTRIZ =========\n";
+        cout << "1. Registrar cliente (Ventas)\n";
+        cout << "2. Mostrar clientes\n";
+        cout << "3. Agregar servicio (Postventa)\n";
+        cout << "4. Mostrar servicios\n";
+        cout << "5. Ejecutar servicio\n";
+        cout << "6. Agregar repuesto (Servicio Técnico)\n";
+        cout << "7. Mostrar repuestos\n";
+        cout << "8. Usar repuesto\n";
+        cout << "9. Salir\n";
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+        cout << endl;
+
+        switch (opcion) {
+            case 1: {
+                int id;
+                string nombre, contacto;
+                cout << "ID Cliente: "; cin >> id;
+                cin.ignore();
+                cout << "Nombre: "; getline(cin, nombre);
+                cout << "Contacto: "; getline(cin, contacto);
+                registrarCliente(id, nombre, contacto);
+                break;
+            }
+
+            case 2:
+                mostrarClientes();
+                break;
+
+            case 3: {
+                int id, prioridad;
+                string tipo;
+                cout << "ID Servicio: "; cin >> id;
+                cin.ignore();
+                cout << "Tipo de servicio: "; getline(cin, tipo);
+                cout << "Prioridad (1=Alta, 2=Media, 3=Baja): "; cin >> prioridad;
+                encolarServicio(id, tipo, prioridad);
+                break;
+            }
+
+            case 4:
+                mostrarServicios();
+                break;
+
+            case 5:
+                ejecutarServicio();
+                break;
+
+            case 6: {
+                int id;
+                string nombre;
+                cout << "ID Repuesto: "; cin >> id;
+                cin.ignore();
+                cout << "Nombre: "; getline(cin, nombre);
+                agregarRepuesto(id, nombre);
+                break;
+            }
+
+            case 7:
+                mostrarRepuestos();
+                break;
+
+            case 8:
+                usarRepuesto();
+                break;
+
+            case 9:
+                cout << "Saliendo..." << endl;
+                break;
+
+            default:
+                cout << "Opción no válida. Intente nuevamente.\n";
+                break;
+        }
+
+    } while (opcion != 9);
+
+    return 0;
+}
