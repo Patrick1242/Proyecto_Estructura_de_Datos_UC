@@ -133,17 +133,21 @@ void mostrarRepuestos() {
 int main() {
     int opcion;
     do {
-        cout << "\n========= SISTEMA DE GESTIÓN AUTOMOTRIZ =========\n";
-        cout << "1. Registrar cliente (Ventas)\n";
-        cout << "2. Mostrar clientes\n";
-        cout << "3. Agregar servicio (Postventa)\n";
-        cout << "4. Mostrar servicios\n";
-        cout << "5. Ejecutar servicio\n";
-        cout << "6. Agregar repuesto (Servicio Técnico)\n";
-        cout << "7. Mostrar repuestos\n";
-        cout << "8. Usar repuesto\n";
-        cout << "9. Salir\n";
-        cout << "Seleccione una opción: ";
+        system("cls"); // Windows; usa "clear" en Linux/Mac
+        cout << "==================================================\n";
+        cout << "||     SISTEMA DE GESTION AUTOMOTRIZ            ||\n";
+        cout << "==================================================\n";
+        cout << "|| 1. Registrar cliente (Ventas)                ||\n";
+        cout << "|| 2. Mostrar clientes                          ||\n";
+        cout << "|| 3. Agregar servicio (Postventa)              ||\n";
+        cout << "|| 4. Mostrar servicios                         ||\n";
+        cout << "|| 5. Ejecutar servicio                         ||\n";
+        cout << "|| 6. Agregar repuesto (Servicio Tecnico)       ||\n";
+        cout << "|| 7. Mostrar repuestos                         ||\n";
+        cout << "|| 8. Usar repuesto                             ||\n";
+        cout << "|| 9. Salir                                     ||\n";
+        cout << "==================================================\n";
+        cout << "\nSeleccione una opcion: ";
         cin >> opcion;
         cout << endl;
 
@@ -158,30 +162,25 @@ int main() {
                 registrarCliente(id, nombre, contacto);
                 break;
             }
-
             case 2:
                 mostrarClientes();
                 break;
-
             case 3: {
                 int id, prioridad;
                 string tipo;
                 cout << "ID Servicio: "; cin >> id;
                 cin.ignore();
                 cout << "Tipo de servicio: "; getline(cin, tipo);
-                cout << "Prioridad (1=Alta, 2=Media, 3=Baja): "; cin >> prioridad;
+                cout << "Prioridad (1=Alta, 2=Media, 3=B_ps): "; cin >> prioridad;
                 encolarServicio(id, tipo, prioridad);
                 break;
             }
-
             case 4:
                 mostrarServicios();
                 break;
-
             case 5:
                 ejecutarServicio();
                 break;
-
             case 6: {
                 int id;
                 string nombre;
@@ -191,25 +190,25 @@ int main() {
                 agregarRepuesto(id, nombre);
                 break;
             }
-
             case 7:
                 mostrarRepuestos();
                 break;
-
             case 8:
                 usarRepuesto();
                 break;
-
             case 9:
                 cout << "Saliendo..." << endl;
                 break;
-
             default:
-                cout << "Opción no válida. Intente nuevamente.\n";
+                cout << "Opcion no valida. Intente nuevamente.\n";
                 break;
         }
-
+        
+        if (opcion != 9) {
+            cout << "\nPresione Enter para continuar...";
+            cin.get();
+        }
+        
     } while (opcion != 9);
-
     return 0;
 }
