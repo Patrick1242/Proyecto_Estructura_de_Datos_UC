@@ -69,3 +69,27 @@ void encolarServicio(int id, string tipo, int prioridad) {
     }
     cout << "Servicio agregado: " << tipo << " (Prioridad " << prioridad << ")\n";
 }
+
+void ejecutarServicio() {
+    if (frenteServicios == NULL) {
+        cout << "No hay servicios pendientes.\n";
+        return;
+    }
+    Servicio* temp = frenteServicios;
+    frenteServicios = frenteServicios->siguiente;
+    cout << "Ejecutando servicio ID " << temp->id << ": " << temp->tipo << endl;
+    delete temp;
+}
+
+void mostrarServicios() {
+    if (frenteServicios == NULL) {
+        cout << "No hay servicios en cola.\n";
+        return;
+    }
+    Servicio* temp = frenteServicios;
+    cout << "\n--- Cola de Servicios (Postventa) ---\n";
+    while (temp != NULL) {
+        cout << "ID: " << temp->id << " | Tipo: " << temp->tipo << " | Prioridad: " << temp->prioridad << endl;
+        temp = temp->siguiente;
+    }
+}
