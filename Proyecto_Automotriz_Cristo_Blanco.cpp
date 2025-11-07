@@ -168,17 +168,11 @@ string obtenerNombreCliente(int idBuscado) {
     return "";
 }
 
-// === LIMPIAR PANTALLA (sin system) ===
-void limpiarPantalla() {
-    for (int i = 0; i < 50; ++i) cout << endl;
-}
-
 // === PROGRAMA PRINCIPAL ===
 int main() {
     int opcion;
 
     do {
-        limpiarPantalla();  // Sin system()
 
         cout << "==================================================\n";
         cout << "||     SISTEMA DE GESTION AUTOMOTRIZ            ||\n";
@@ -208,7 +202,6 @@ int main() {
                 while (true) {
                     if (cin >> id && id > 0) {
                         if (!existeCliente(id)) {
-                            cin.ignore(256, '\n');  // Limpia buffer
                             break;
                         } else {
                             cout << "Error: El ID " << id << " ya esta registrado. Ingrese otro: ";
@@ -222,7 +215,6 @@ int main() {
 
                 // --- NOMBRE (solo letras y espacios) ---
                 cout << "Nombre (solo letras): ";
-                cin.ignore(256, '\n');  // Limpia salto de línea
                 while (true) {
                     getline(cin, nombre);
                     if (nombre.empty()) {
@@ -280,7 +272,6 @@ int main() {
                 while (true) {
                     if (cin >> idCliente && idCliente > 0) {
                         if (existeCliente(idCliente)) {
-                            cin.ignore(256, '\n');
                             break;
                         } else {
                             cout << "Error: No existe cliente con ID " << idCliente << ". Intente otro: ";
@@ -288,7 +279,6 @@ int main() {
                     } else {
                         cout << "Error: Ingrese solo numeros mayores a 0: ";
                         cin.clear();
-                        cin.ignore(256, '\n');
                     }
                 }
 
@@ -296,17 +286,15 @@ int main() {
                 cout << "ID Servicio (autogenerado): " << idServicio << endl;
 
                 cout << "Tipo de servicio: ";
-                cin.ignore(256, '\n');
                 getline(cin, tipo);
+                cin >> tipo;
                 if (tipo.empty()) tipo = "Sin descripcion";
 
                 cout << "Prioridad (1=Alta, 2=Media, 3=Baja): ";
                 while (!(cin >> prioridad) || prioridad < 1 || prioridad > 3) {
                     cout << "Error: Prioridad debe ser 1, 2 o 3: ";
                     cin.clear();
-                    cin.ignore(256, '\n');
                 }
-                cin.ignore(256, '\n');
 
                 string nombreCliente = obtenerNombreCliente(idCliente);
                 cout << "Servicio para: " << nombreCliente << endl;
