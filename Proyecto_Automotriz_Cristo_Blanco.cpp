@@ -63,7 +63,11 @@ Servicio* frenteServicios = NULL;
 
 // === ENCOLAR SERVICIO ===
 void encolarServicio(int id, string tipo, int prioridad) {
-    Servicio* nuevo = new Servicio{id, tipo, prioridad, NULL};
+    Servicio* nuevo = new Servicio;
+	nuevo->id = id;
+	nuevo->tipo = tipo;
+	nuevo->prioridad = prioridad;
+	nuevo->siguiente = NULL;
 
     if (frenteServicios == NULL || prioridad < frenteServicios->prioridad) {
         nuevo->siguiente = frenteServicios;
@@ -118,7 +122,11 @@ Repuesto* cimaRepuestos = NULL;
 
 // === AGREGAR REPUESTO ===
 void agregarRepuesto(int id, string nombre, int idCliente) {
-    Repuesto* nuevo = new Repuesto{id, nombre, idCliente, cimaRepuestos};
+    Repuesto* nuevo = new Repuesto;
+	nuevo->id = id;
+	nuevo->nombre = nombre;
+	nuevo->idCliente = idCliente;
+	nuevo->abajo = cimaRepuestos;
     cimaRepuestos = nuevo;
     cout << "Repuesto agregado: " << nombre << " (Cliente ID: " << idCliente << ")" << endl;
 }
@@ -194,68 +202,69 @@ int main() {
 
         switch (opcion) {
             case 1: {
-                int id;
-                string nombre, contacto;
-
-                // --- ID ---
-                cout << "ID Cliente (ingrese manualmente): ";
-                while (true) {
-                    if (cin >> id && id > 0) {
-                        if (!existeCliente(id)) {
-                            break;
-                        } else {
-                            cout << "Error: El ID " << id << " ya esta registrado. Ingrese otro: ";
-                        }
-                    } else {
-                        cout << "Error: Ingrese solo numeros mayores a 0: ";
-                        cin.clear();
-                        cin.ignore(256, '\n');
-                    }
-                }
-
-                // --- NOMBRE (solo letras y espacios) ---
-                cout << "Nombre (solo letras): ";
-                while (true) {
-                    getline(cin, nombre);
-                    if (nombre.empty()) {
-                        cout << "Error: No puede estar vacio: ";
-                        continue;
-                    }
-                    bool valido = true;
-                    for (size_t i = 0; i < nombre.length(); ++i) {
-					    char c = nombre[i];
-					    if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == ' ')) {
-					        valido = false;
-					        break;
-					    }
-					}
-                    if (valido) break;
-                    cout << "Error: Solo letras y espacios: ";
-                }
-
-                // --- CONTACTO (solo números) ---
-                cout << "Contacto (solo numeros): ";
-                while (true) {
-                    getline(cin, contacto);
-                    if (contacto.empty()) {
-                        cout << "Error: No puede estar vacio: ";
-                        continue;
-                    }
-                    bool valido = true;
-                    for (size_t i = 0; i < contacto.length(); ++i) {
-					    char c = contacto[i];
-					    if (c < '0' || c > '9') {
-					        valido = false;
-					        break;
-					    }
-					}
-                    if (valido) break;
-                    cout << "Error: Solo numeros permitidos: ";
-                }
-
-                registrarCliente(id, nombre, contacto);
-                break;
-            }
+			    int id;
+			    string nombre, contacto;
+			
+			    // --- ID CLIENTE ---
+			    cout << "ID Cliente (ingrese manualmente): ";
+			    while (true) {
+			        if (cin >> id && id > 0) {
+			            if (!existeCliente(id)) {
+			                cin.ignore(256, '\n');  // ¡LIMPIA EL SALTO DE LÍNEA!
+			                break;
+			            } else {
+			                cout << "Error: El ID " << id << " ya esta registrado. Ingrese otro: ";
+			            }
+			        } else {
+			            cout << "Error: Ingrese solo numeros mayores a 0: ";
+			            cin.clear();
+			            cin.ignore(256, '\n');
+			        }
+			    }
+			
+			    // --- NOMBRE ---
+			    cout << "Nombre (solo letras): ";
+			    while (true) {
+			        getline(cin, nombre);  // AHORA SÍ ESPERA TU ENTRADA
+			        if (nombre.empty()) {
+			            cout << "Error: No puede estar vacio: ";
+			            continue;
+			        }
+			        bool valido = true;
+			        for (size_t i = 0; i < nombre.length(); ++i) {
+			            char c = nombre[i];
+			            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == ' ')) {
+			                valido = false;
+			                break;
+			            }
+			        }
+			        if (valido) break;
+			        cout << "Error: Solo letras y espacios: ";
+			    }
+			
+			    // --- CONTACTO ---
+			    cout << "Contacto (solo numeros): ";
+			    while (true) {
+			        getline(cin, contacto);
+			        if (contacto.empty()) {
+			            cout << "Error: No puede estar vacio: ";
+			            continue;
+			        }
+			        bool valido = true;
+			        for (size_t i = 0; i < contacto.length(); ++i) {
+			            char c = contacto[i];
+			            if (c < '0' || c > '9') {
+			                valido = false;
+			                break;
+			            }
+			        }
+			        if (valido) break;
+			        cout << "Error: Solo numeros permitidos: ";
+			    }
+			
+			    registrarCliente(id, nombre, contacto);
+			    break;
+			}
 
             case 2: mostrarClientes(); break;
 
@@ -316,11 +325,12 @@ int main() {
 			    int idCliente;
 			    string nombre;
 			
+			    // --- LEER ID CLIENTE ---
 			    cout << "ID Cliente (registrado): ";
 			    while (true) {
 			        if (cin >> idCliente && idCliente > 0) {
 			            if (existeCliente(idCliente)) {
-			                cin.ignore(256, '\n');
+			                cin.ignore(256, '\n');  // ¡Limpia el salto de línea!
 			                break;
 			            } else {
 			                cout << "Error: No existe cliente con ID " << idCliente << ". Intente otro: ";
@@ -328,21 +338,23 @@ int main() {
 			        } else {
 			            cout << "Error: Ingrese solo numeros mayores a 0: ";
 			            cin.clear();
+			            cin.ignore(256, '\n');
 			        }
 			    }
 			
 			    int idRepuesto = contadorRepuestos++;
 			    cout << "ID Repuesto (autogenerado): " << idRepuesto << endl;
 			
+			    // --- LEER NOMBRE DEL REPUESTO ---
 			    cout << "Nombre del repuesto: ";
-			    cin.ignore(256, '\n');
-			    getline(cin, nombre);
-			    if (nombre.empty()) nombre = "Sin nombre";
+			    getline(cin, nombre);  // AHORA SÍ ESPERA TU ENTRADA
+			    if (nombre.empty()) {
+			        nombre = "Sin nombre";
+			    }
 			
 			    string nombreCliente = obtenerNombreCliente(idCliente);
 			    cout << "Repuesto para: " << nombreCliente << endl;
 			
-			    // SIN to_string(), SIN <sstream>
 			    agregarRepuesto(idRepuesto, nombre, idCliente);
 			    break;
 			}
