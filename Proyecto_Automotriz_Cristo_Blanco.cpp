@@ -41,3 +41,31 @@ void mostrarClientes() {
         temp = temp->siguiente;
     }
 }
+
+struct Servicio {
+    int id;
+    string tipo;
+    int prioridad; 
+    Servicio* siguiente;
+};
+
+Servicio* frenteServicios = NULL;
+
+   
+void encolarServicio(int id, string tipo, int prioridad) {
+    Servicio* nuevo = new Servicio{id, tipo, prioridad, NULL};
+
+       
+    if (frenteServicios == NULL || prioridad < frenteServicios->prioridad) {
+        nuevo->siguiente = frenteServicios;
+        frenteServicios = nuevo;
+    } else {
+        Servicio* temp = frenteServicios;
+        while (temp->siguiente != NULL && temp->siguiente->prioridad <= prioridad) {
+            temp = temp->siguiente;
+        }
+        nuevo->siguiente = temp->siguiente;
+        temp->siguiente = nuevo;
+    }
+    cout << "Servicio agregado: " << tipo << " (Prioridad " << prioridad << ")\n";
+}
