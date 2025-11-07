@@ -186,20 +186,40 @@ int main() {
                 int id;
                 string nombre, contacto;
 
-                // ID: solo números
+                // ID: solo números y mayor a 0
                 cout << "ID Cliente (solo numeros): ";
-                while (!(cin >> id)) {
-                    cout << "Error: Ingrese solo numeros: ";
-                    cin.clear();           // Limpia estado de error
-                    cin.ignore(10000, '\n'); // Descarta entrada inválida
+                while (!(cin >> id) || id <= 0) {
+                    if (!(cin >> id)) {
+                        cout << "Error: Ingrese solo numeros: ";
+                        cin.clear();
+                        cin.ignore(10000, '\n');
+                    } else {
+                        cout << "Error: ID debe ser mayor a 0: ";
+                        cin.ignore(10000, '\n');
+                    }
                 }
-                cin.ignore(); // Elimina salto de línea después del número
+                cin.ignore(); // limpia el salto de línea
 
-                // Nombre: 
-                cout << "Nombre: ";
-                getline(cin, nombre);
+                // NOMBRE: solo letras y espacios
+                cout << "Nombre (solo letras): ";
+                while (true) {
+                    getline(cin, nombre);
+                    if (nombre.empty()) {
+                        cout << "Error: No puede estar vacio: ";
+                        continue;
+                    }
+                    bool soloLetras = true;
+                    for (char c : nombre) {
+                        if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == ' ')) {
+                            soloLetras = false;
+                            break;
+                        }
+                    }
+                    if (soloLetras) break;
+                    cout << "Error: Solo letras y espacios: ";
+                }
 
-                // Contacto: solo números
+                // CONTACTO: solo números y no vacío
                 cout << "Contacto (solo numeros): ";
                 while (true) {
                     getline(cin, contacto);
@@ -207,14 +227,14 @@ int main() {
                         cout << "Error: No puede estar vacio: ";
                         continue;
                     }
-                    bool valido = true;
+                    bool soloNumeros = true;
                     for (char c : contacto) {
                         if (c < '0' || c > '9') {
-                            valido = false;
+                            soloNumeros = false;
                             break;
                         }
                     }
-                    if (valido) break;
+                    if (soloNumeros) break;
                     cout << "Error: Solo numeros permitidos: ";
                 }
 
